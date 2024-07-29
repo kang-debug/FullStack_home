@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 02 Assignment</title>
+    <style>
+        td{
+            border: 1px solid gray;
+            padding: 8px;
+            vertical-align: top;
+        }
+        .postTable{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .commentTable tr td{
+            border-left: 0 solid black;
+            border-right: 0 solid black;
+            border-top: 0 solid black;
+            border-bottom: 1 solid black;
+        }
+        .firstLine{
+            background: orange;
+            font-weight: bold;
+        }
+        .commentTblhead{
+            font-weight: bold;
+        }
+    </style>
+</head> 
+<body>
+    <form action="">
+        <label for="uname">이름</label>
+        <input type="text" id="uname" name="uname">
+        <br>
+
+        <label for="department">부서</label>
+        <input type="text" id="department" name="department">
+        <br>
+
+        <label for="position">직책</label>
+        <input type="text" id="position" name="position">
+        <br>
+
+        <label for="picture">사진</label>
+        <input type="file" value="파일 선택">
+        <br>
+        <br>
+
+        <input type="button" value="새 사원 추가" style="background-color: red; color: white;">
+        <hr>
+
+        <input type="button" value="선택 삭제"> <label for="position">| 검색:</label>
+        <select name="이름">
+            <option value="1">이름</option>
+            <option value="2">메시</option>
+            <option value="3">벤제마</option>
+            <option value="4">호날두</option>
+            <input type="box" />
+          </select>
+    </form>
+    <table class="postTable">
+        <tr class="firstLine">
+            <td><input type="checkbox" name="select" id="select"></td>
+            <td>번호</td>
+            <td>사진</td>
+            <td>사원명</td>
+            <td>부서</td>
+            <td>직급</td>
+            <td>수정</td>
+            <td>삭제</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><input type="checkbox" name="select" id="select"></td>
+            <td rowspan="2">1043</td>
+            <td><img src="다운로드.jpeg"></td>
+            <td>홍길동</td>
+            <td>개발</td>
+            <td>대리</td>
+            <td rowspan="2"><input type="button" value="edit"></td>
+            <td rowspan="2"><input type="button" value="delete"></td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <table class="commentTable" width="100%" cellspacing="0">
+                    <tr class="commentTblhead">
+                        <td>번호</td>
+                        <td>댓글 내용</td>
+                        <td>작성자</td>
+                        <td>수정</td>
+                        <td>삭제</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>멋진 사진입니다</td>
+                        <td>박문수</td>
+                        <td><input type="button" value="수정"></td>
+                        <td><input type="button" value="삭제"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>좋아요^^ 퍼가요~</td>
+                        <td>일지매</td>
+                        <td><input type="button" value="수정"></td>
+                        <td><input type="button" value="삭제"></td>
+                    </tr>
+                    <tr >
+                        <td colspan="5">
+                            댓글 <input type="text" style="width: 40%;">
+                            작성자 <input type="text" style="width: 25%;">
+                            <button>댓글입력</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table> 
+    
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--
+        자바스크립트는 인터프리터 언어(자바,c언어는 컴파일언어)
+        컴파일은 번역, 인터프리터는 통역
+    -->
+    <script>
+        //자바스크립트에서는 모든 요소가 객체이다.
+        // var num=100;
+        // console.log(num.valueOf());
+
+        //이벤트 핸들러를 이용하여 문서의 모든 요소가 로드되면 실행
+        window.addEventListener('load',function(){})
+        window.onload=function(){
+            console.dir(window.document.body);
+            //id 값으로 태그 엘리먼트를 객체로 참조
+            var demo = document.getElementById('demo')
+            var changeBtn=document.getElementById('changeBtn');
+            var resetBtn=document.getElementById('resetBtn');
+            // console.log(demo);
+            // console.log(changeBtn);
+            // console.log(resetBtn);
+            // 버튼에 클릭 이벤트 핸들러를 추가해서 내용을 변경
+            clickBtn.onclick=function(){
+                console.log("클릭 되었다!");
+                demo.innerHTML="<h2>버튼이 클릭되었다!<h2>"
+                document.body.bgColor="skyblue";
+
+            }
+            resetBtn.onclick=function(){
+                demo.innerHTML="JavaScript can change HTML content"
+                document.body.bgColor="";
+            }
+            // changeBtn.addEventListener('click', function() {
+            //                             demo.innerHTML = 'Change background';
+            //                             document.body.bgColor = "yellow";
+            //                         });
+            // resetBtn.addEventListener('click',function(){
+            //                             demo.innerHTML='JavaScript can change HTML content.'
+            //                             document.body.bgColor='white'
+            //                         })
+
+        }
+    </script>
+</head>
+<body>
+    
+    <p id="demo">JavaScript can change HTML content.</p>
+
+    <!-- 인터널 적용 방식 -->
+    <button type="button" id="clickBtn">Click</button>
+    <button type="button" id="changeBtn">Change</button>
+    <button type="button" id="resetBtn">Reset</button>
+
+</body>
+</html>

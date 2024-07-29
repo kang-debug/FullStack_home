@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var todoList = [
+            {seq:101, title:"여행하기", done:false},
+            {seq:102, title:"포트폴리오 만들기", done:true},
+            {seq:103, title:"수박 먹기", done:false},
+            {seq:104, title:"농구 하기", done:false},
+        ];
+        var seqCnt = 105;
+
+        window.onload = function() {
+            var memoTxt = document.getElementById('memoTxt');
+            var demo = document.querySelector('#demo');
+            var editContainer = document.querySelector('#editContainer');
+            var editTxt = document.getElementById('editTxt');
+            var saveEditBtn = document.getElementById('saveEditBtn');
+            var clickBtn = document.querySelector('#clickBtn');
+            var resetBtn = document.querySelector('#resetBtn');
+            var currentEditSeq = null;
+
+            HTMLButtonElement.prototype.handleDelEvt = function(btn) {
+                var trElement = btn.parentElement.parentElement;
+                var seq = parseInt(trElement.dataset.seq);
+                todoList = todoList.filter(function(todoObj) {
+                    return todoObj.seq !== seq;
+                });
+                drawList();
+            }
+
+            HTMLButtonElement.prototype.editClickHandle = function(btn) {
+                var trElement = btn.parentElement.parentElement;
+                var seq = parseInt(trElement.dataset.seq);
+                var todoObj = todoList.find(function(item) {
+                    return item.seq === seq;
+                });
+                currentEditSeq = seq;
+                editTxt.value = todoObj.title;
+                editContainer.style.display = 'block';
+            }
+
+            window.aaaa = function() {
+                console.log('windows.aaa() 호출...');
+            }
+
+            function drawList() {
+                demo.innerHTML = "";
+                todoList.forEach(function(todoObj) {
+                    demo.innerHTML += `<tr align="center" data-seq="${todoObj.seq}">
+                        <td><input type="checkbox"></td>
+                        <td>${todoObj.title}</td>
+                        <td><button onclick="editClickHandle(this)">수정</button></td>
+                        <td><button onclick="handleDelEvt(this)">삭제</button></td>
+                    </tr>`;
+                });
+            }
+            drawList();
+
+            var handleEvent = function(event) {
+                todoList.push({seq: seqCnt++, title: memoTxt.value, done: false});
+                drawList();
+                memoTxt.value = "";
+                memoTxt.focus();
+            }
+            clickBtn.addEventListener('click', handleEvent);
+
+            memoTxt.onkeyup = function(event) {
+                if (event.keyCode === 13) {
+                    handleEvent(event);
+                }
+            }
+
+            editTxt.onkeyup = function(event){
+                if (event.keyCode === 13) {
+                    editClickHandle(event);
+                }
+            }
+
+            saveEditBtn.onclick = function() {
+                var todoObj = todoList.find(function(item) {
+                    return item.seq === currentEditSeq;
+                });
+                todoObj.title = editTxt.value;
+                drawList();
+                editContainer.style.display = 'none';
+                editTxt.value = '';
+                currentEditSeq = null;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Todo List</h1>
+    메모: <input type="text" id="memoTxt" value="" placeholder="할 일 입력"> 
+    <button type="button" id="clickBtn">Save</button>
+    <button type="button" id="resetBtn">Reset</button>
+    <hr>
+    검색: <input type="text" id="searchTxt" placeholder="검색할 목록 입력"> 
+    <button id="searchBtn">검색</button>
+    <hr>
+    <table width="550" border="1">
+        <thead>
+            <tr>
+                <th>확인</th>
+                <th>할일</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody id="demo">
+            
+        </tbody>
+    </table>
+    <div id="editContainer" style="display:none; margin-top: 20px;">
+        <input type="text" id="editTxt" placeholder="수정할 내용 입력">
+        <button type="button" id="saveEditBtn">Save Edit</button>
+    </div>
+</body>
+</html>

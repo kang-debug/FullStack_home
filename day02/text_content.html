@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML CSS Text</title>
+    <style>
+        div{
+            height: 50vh;
+        }
+        div[name=n1]{ background: yellow;}
+        div[name=n2]{ background: green;}
+        div[name=n3]{ background: gray;}
+        div[name=n4]{ background: pink;}
+    </style>
+</head>
+<body>
+    <h1>홍차</h1>
+    <hr>
+    <h2>정의</h2>
+    <p>
+        홍차는 백차, 녹차, 우롱차보다 더 많이 발효된 차의 일종이다.
+        동양에서는 찻물의 빛이 붉기 때문에 홍차라고 부르지만,
+        서양에서는 찻잎의 색깔 때문에 'balck tea'라고 부른다.
+    </p>
+    <br>
+    <h2>등급</h2>
+    <p>홍차는 여러 가지로 등급이 매겨진다. 일반적으로 찻잎의 모양에 따른
+        등급과 가공 상태에 따른 등급을 조합하여 표시한다.
+    </p>
+    <p>- 브로큰 페코</p>
+    <p>- 브로큰 페코 수숑</p>
+    <p>- 브로큰 오렌지 페코 패닝</p>
+    
+    <table bgcolor="gray" border="1" width="400">
+        <tr bgcolor="white">
+            <td rowspan="3">a1</td>
+            <td>a2</td>
+            <td>a3</td>
+            <td rowspan="3">a4</td>
+        </tr>
+        <tr bgcolor="white">
+
+            <td colspan="2" align="center" >b2</td>
+
+
+        </tr>
+        <tr bgcolor="white">
+
+            <td>c2</td>
+            <td>c3</td>
+
+        </tr>
+    </table>
+    <hr>
+    <p> 
+        절대 경로<br>
+        <!-- 절대경로 링크 지정-->
+        <a href="http://www.naver.com">네이버</a>
+        <a href="http://google.com">구글</a>
+    </p>
+    <hr>
+    <p>
+        상대 경로<br>
+        <!-- 상대경로 링크 지정 -->
+        <a href="../day01\hello.html">hello</a>
+    </p>
+    <hr>
+    <p>
+        아이디 경로<br>
+        <!-- 아이디경로 링크 지정-->
+         <a href="#n1">N1</a>
+         <a href="#n2">N2</a>
+         <a href="#n3">N3</a>
+         <a href="#n4">N4</a>
+    </p>
+    <div name="n1" id="n1">N1</div>
+    <div name="n2" id="n2">N2</div>
+    <div name="n3" id="n3">N3</div>
+    <div name="n4" id="n4">N4</div>
+</body>
+</html>

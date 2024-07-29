@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  
+    <script>
+       window.onload=function(){
+        var memoTxt = document.getElementById('memoTxt');
+        //  querySelector('')는 css의 선택기(seletor)를 그대로 사용 가능.
+        //  css에서 id는 #으로 class는 .으로 속성은 []로 시작
+        //  태그는 그냥 태그 이름으로
+        var demo = document.querySelector('#demo');
+        var clickBtn = document.querySelector('#clickBtn');
+        var resetBtn = document.querySelector('#resetBtn');
+
+        console.log(memoTxt, demo, resetBtn)
+
+        // TDD : 테스트 주도 개발
+
+        // 이벤트 핸들러 만들기(self)
+        // clickBtn.onclick=function(){
+        //         var memoTxt = document.getElementById('memoTxt');
+        //         console.log(memoTxt.value+"를 입력받았습니다");
+        //         document.getElementById("demo").innerText=memoTxt.value;
+        //     }
+        // resetBtn.onclick=function(){
+        //         document.getElementById("demo").innerText="JavaScript can change HTML content.";
+        //     }
+        clickBtn.addEventListener('click',function(event){
+            //1. 클릭 되는지 확인 
+            //alert('버튼 클릭');
+            //console.log('버튼 클릭')
+
+            //2. 메모 input의 데이터 가져오기
+            var memoTxtVal= memoTxt.value;
+
+            //3. 가져온 데이터를 텍스트로 변경
+            demo.innerHTML = memoTxtVal;
+
+            //4. 초기화 시키기
+            memoTxt.ariaValueMin="";
+            memoTxt.focus();
+        })
+
+        
+       }
+        
+    </script>
+</head>
+<body>
+    메모 : <input type="text" id="memoTxt" value="">
+    <p id="demo">JavaScript can change HTML content.</p>
+
+    <!-- 인터널 적용 방식 -->
+    <button type="button" id="clickBtn">Click</button>
+    <button type="button" id="resetBtn">Reset</button>
+
+
+</body>
+</html>
