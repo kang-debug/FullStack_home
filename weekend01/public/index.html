@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 관리 페이지</title>
+    <!-- jQuery CDN 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        .saveBtn {
+            width: 100px;
+            height: 30px;
+            background-color: red;
+            border: 0;
+            border-radius: 6px;
+            box-shadow: 1px 1px 2px;
+        }
+
+        .element {
+            border: 2px solid rgba(100, 100, 100, 1);
+            border-radius: 4px;
+            background-color: rgba(247, 203, 203, 0.5);
+            box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.77);
+            text-shadow: 4px 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 10px 0px;
+            text-align: center;
+        }
+
+        .memListTbl {
+            border: 1px solid black;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .memListTbl tr th {
+            border: 1px solid black;
+        }
+
+        .memListTbl td {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .subTbl tr td {
+            border-left: 0 solid black;
+            border-right: 0 solid black;
+            border-top: 0 solid black;
+            border-bottom: 1 solid black;
+        }
+
+        div.container {
+            margin: auto;
+            max-width: 800px;
+            min-width: 600px;
+        }
+
+        td img {
+            width: 20%;
+            height: 25%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h1 class="element">회원 관리 페이지</h1>
+        </div>
+        <div>
+            <form action="" method="post">
+                <table>
+                    <tr>
+                        <th><label for="name">이름</label></th>
+                        <td><input type="text" name="name" id="name" placeholder="성명을 입력 하세요"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="dept">부서</label></th>
+                        <td><input type="text" name="name" id="dept" placeholder="부서를 입력하세요"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="rank">직책</label></th>
+                        <td><input type="text" name="name" id="rank" placeholder="직책을 입력하세요"></td>
+                    </tr>
+
+                    <tr>
+                        <th><label for="photo">사진</label></th>
+                        <td><input type="file" name="" id="photo"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" class="saveBtn" value="SAVE">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <hr>
+        <div>
+            <p>
+                검색 <input type="text"> <button>검색</button>
+            </p>
+            <table class="memListTbl">
+                <tr>
+                    <th>
+                        <input type="checkbox" name="" id="">
+                    </th>
+                    <th>번호</th>
+                    <th>사진</th>
+                    <th>사원명</th>
+                    <th>부서</th>
+                    <th>직급</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                </tr>
+                <tr>
+                    <td rowspan="2"><input type="checkbox" name="" id=""></td>
+                    <td rowspan="2">1043</td>
+                    <td>
+                        <img src="../img/img01.png">
+                    </td>
+                    <td>홍길동</td>
+                    <td>개발</td>
+                    <td>대리</td>
+                    <td rowspan="2"><button>Edit</button></td>
+                    <td rowspan="2"><button>Delete</button></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table id="table" class="subTbl" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <td>번호</td>
+                                    <td>댓글내용</td>
+                                    <td>작성자</td>
+                                    <td>수정</td>
+                                    <td>삭제</td>
+                                </tr>
+                            </thead>
+                            <tbody id="commentArea">
+
+                            </tbody>
+                            <tr>
+                                <td colspan="5">
+                                    댓글 <input type="text" id="commentTxt" value="" placeholder="댓글입력">
+                                    작성자 <input type="text" id="commentEmp" value="" placeholder="작성자">
+                                    <button type="button" id="postComment">댓글입력</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </table>
+    <script>
+
+        window.onload = function () {
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:3000/board",
+                success: function (data, status, xhr) {
+                    var xhr = event.target;
+                    var commentList = data;
+                    ;
+
+                    const commentArea = document.querySelector('#commentArea');
+
+                    function drawComment(filter) {
+                        commentArea.innerHTML = "";
+                        (filter || commentList).forEach(comment => {
+                            commentArea.innerHTML +=
+                                `<tr data-no="${comment.no}">
+                                <td>${comment.no}</td>
+                                <td>${comment.post}</td>
+                                <td>${comment.employee}</td>
+                                <td><button class="edit">수정</button></td>
+                                <td><button class="delete">삭제</button></td>
+                                </tr>`;
+                        });
+                    }
+                    drawComment();
+
+
+                    document.getElementById('commentArea').addEventListener('click', function (event) {
+
+                        if (event.target.classList.contains('delete')) {
+                            var tr = event.target.closest('tr');
+                            var no = commentList.findIndex(function (comment) {
+                                return comment.no = tr.dataset.no;
+                            })
+                            if (no != -1) {
+                                commentList.splice(no, 1);
+                            }
+                            drawComment();
+                        }
+                    })
+
+                    document.getElementById('commentArea').addEventListener('click',function(event){
+                        if (event.target.classList.contains('edit')) {
+                            // edit(수정) 구현 예정
+                        }
+                    })
+
+                }
+            });
+
+
+
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -21,6 +21,8 @@
             var saveEditBtn = document.getElementById('saveEditBtn');
             var clickBtn = document.querySelector('#clickBtn');
             var resetBtn = document.querySelector('#resetBtn');
+            var searchTxt = document.getElementById('searchTxt');
+            var searchBtn = document.getElementById('searchBtn');
             var currentEditSeq = null;
 
             HTMLButtonElement.prototype.handleDelEvt = function(btn) {
@@ -43,13 +45,10 @@
                 editContainer.style.display = 'block';
             }
 
-            window.aaaa = function() {
-                console.log('windows.aaa() 호출...');
-            }
 
-            function drawList() {
+            function drawList(filteredTodoList) {
                 demo.innerHTML = "";
-                todoList.forEach(function(todoObj) {
+                (filteredTodoList || todoList).forEach(function(todoObj) {
                     demo.innerHTML += `<tr align="center" data-seq="${todoObj.seq}">
                         <td><input type="checkbox"></td>
                         <td>${todoObj.title}</td>
@@ -59,28 +58,32 @@
                 });
             }
             drawList();
+            
+            function savelocal() {
+                localStorage.setItem('todoList', JSON.stringify(todoList));
+                alert('데이터가 저장되었습니다!');
+            }
 
+            function loadData() {
+                var savedData = localStorage.getItem('todoList');
+                if (savedData) {
+                    todoList = JSON.parse(savedData);
+                    seqCnt = todoList.length > 0 ? Math.max(...todoList.map(todo => todo.seq)) + 1 : 1;
+                    drawList();
+                } else {
+                    alert('저장된 데이터가 없습니다.');
+                }
+            }
+
+            // 이벤트 함수
             var handleEvent = function(event) {
                 todoList.push({seq: seqCnt++, title: memoTxt.value, done: false});
                 drawList();
                 memoTxt.value = "";
                 memoTxt.focus();
             }
-            clickBtn.addEventListener('click', handleEvent);
 
-            memoTxt.onkeyup = function(event) {
-                if (event.keyCode === 13) {
-                    handleEvent(event);
-                }
-            }
-
-            editTxt.onkeyup = function(event){
-                if (event.keyCode === 13) {
-                    editClickHandle(event);
-                }
-            }
-
-            saveEditBtn.onclick = function() {
+            var saveEditEvent = function(){
                 var todoObj = todoList.find(function(item) {
                     return item.seq === currentEditSeq;
                 });
@@ -90,14 +93,53 @@
                 editTxt.value = '';
                 currentEditSeq = null;
             }
+
+            var searchEvent = function(){
+                var searchTerm = searchTxt.value.toLowerCase();
+                var filteredTodoList = todoList.filter(function(todoObj) {
+                    return todoObj.title.toLowerCase().includes(searchTerm);
+                });
+                drawList(filteredTodoList);
+            }
+            
+            memoTxt.onkeyup = function(event) {
+                if (event.keyCode === 13) {
+                    handleEvent(event);
+                }
+            }
+
+            // 엔터로 입력해도 작동
+            editTxt.onkeyup = function(event){
+                if (event.keyCode === 13) {
+                    saveEditEvent(event);
+                }
+            }
+
+            searchTxt.onkeyup = function(event){
+                if (event.keyCode === 13) {
+                    searchEvent(event);
+                }
+            }
+
+            saveBtn.addEventListener('click', savelocal);
+
+            loadBtn.addEventListener('click', loadData);
+
+            clickBtn.addEventListener('click', handleEvent);
+
+            saveEditBtn.addEventListener('click',saveEditEvent);
+            
+            searchBtn.addEventListener('click',searchEvent);
         }
     </script>
 </head>
 <body>
     <h1>Todo List</h1>
     메모: <input type="text" id="memoTxt" value="" placeholder="할 일 입력"> 
-    <button type="button" id="clickBtn">Save</button>
+    <button type="button" id="clickBtn">Add</button>
     <button type="button" id="resetBtn">Reset</button>
+    <button type="button" id="saveBtn">Save</button>
+    <button type="button" id="loadBtn">TodoList</button>
     <hr>
     검색: <input type="text" id="searchTxt" placeholder="검색할 목록 입력"> 
     <button id="searchBtn">검색</button>

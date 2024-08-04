@@ -7,11 +7,13 @@
 </head>
 <body>
     <h1>사람 정보 수정</h1>
-    <form action="/saram/update" method="get">
-        성명: <input type="text" name="name" value="" placeholder="<%= saram.name %>"><br>
-        이메일: <input type="email" name="email" value="" placeholder="<%= saram.email %>"><br>
-        직업: <input type="text" name="job" value="" placeholder="<%= saram.job %>"><br>
-        나이: <input type="number" name="age" value="" placeholder="<%= saram.age %>"><br>
+    
+    <form action="/saram/edit" method="post">
+        <input type="hidden" name="no" value="<%=saram.no%>">
+        성명: <input type="text" name="name" value="" placeholder="수정할 이름 입력" required><br>
+        이메일: <input type="email" name="email" value="" placeholder="수정할 이메일 입력"required><br>
+        직업: <input type="text" name="job" value="" placeholder="수정할 직업 입력"required><br>
+        나이: <input type="number" name="age" value="" placeholder="수정할 나이 입력"required><br>
         <input type="submit" value="수정">
     </form>
 </body>

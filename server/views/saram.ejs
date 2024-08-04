@@ -4,15 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        table{
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 <body>
     <h3><%=message%></h3>
+
+    <a href="/saram/input">추가</a>
+    
     <hr>
     <table width="100%" border="1">
         <tr>
             <th>번호</th>
             <th>이름</th>
             <th>이메일</th>
+            <th>직업</th>
+            <th>나이</th>
         </tr>
         <%
             // 이부분은 자바스크립트 문법
@@ -22,10 +32,16 @@
             <td><%= saram.no%></td>
             <td><a href="/saram/detail?no=<%= saram.no %>"><%= saram.name%></a></td>
             <td><%= saram.email%></td>
+            <td><%= saram.job%></td>
+            <td><%= saram.age%></td>
         </tr>
         <%
             })
         %>
     </table>
+    <br>
+    <form action="/saram/clear" method="get">
+        <input type="submit" value="사람 정보 초기화">
+    </form>
 </body>
 </html>

@@ -1,0 +1,9 @@
+{
+    "name":"comment",
+    "comment":[
+        {"no":1,"post":"멋진 사진입니다.","employee":"박문수"},
+        {"no":2,"post":"좋아요^^ 퍼가요~","employee":"일지매"}
+
+    ]
+    
+}  
