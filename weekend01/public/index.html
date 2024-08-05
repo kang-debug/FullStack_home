@@ -142,8 +142,8 @@
                             </tbody>
                             <tr>
                                 <td colspan="5">
-                                    댓글 <input type="text" id="commentTxt" value="" placeholder="댓글입력">
-                                    작성자 <input type="text" id="commentEmp" value="" placeholder="작성자">
+                                    댓글 <input type="text" id="commentTxt" value="" placeholder="댓글입력" required>
+                                    작성자 <input type="text" id="commentEmp" value="" placeholder="작성자" required>
                                     <button type="button" id="postComment">댓글입력</button>
                                 </td>
                             </tr>
@@ -152,8 +152,14 @@
                 </tr>
             </table>
         </div>
+        <div id="editContainer" style="display:none; margin-top: 20px;">
+            <input type="text" id="editPostTxt" placeholder="댓글 수정" required>
+            <input type="text" id="editEmpTxt" placeholder="작성자 수정" required>
+            <button type="button" id="saveEditBtn">수정</button>
+        </div>
     </div>
     </table>
+
     <script>
 
         window.onload = function () {
@@ -163,7 +169,7 @@
                 success: function (data, status, xhr) {
                     var xhr = event.target;
                     var commentList = data;
-                    ;
+
 
                     const commentArea = document.querySelector('#commentArea');
 
@@ -180,6 +186,7 @@
                                 </tr>`;
                         });
                     }
+
                     drawComment();
 
 
@@ -187,27 +194,70 @@
 
                         if (event.target.classList.contains('delete')) {
                             var tr = event.target.closest('tr');
-                            var no = commentList.findIndex(function (comment) {
-                                return comment.no = tr.dataset.no;
+                            var idx = commentList.findIndex(function (comment) {
+                                return comment.no == tr.dataset.no;
                             })
-                            if (no != -1) {
-                                commentList.splice(no, 1);
+                            if (idx != -1) {
+                                commentList.splice(idx, 1);
                             }
+
                             drawComment();
                         }
                     })
 
-                    document.getElementById('commentArea').addEventListener('click',function(event){
+
+
+                    document.getElementById('commentArea').addEventListener('click', function (event) {
                         if (event.target.classList.contains('edit')) {
-                            // edit(수정) 구현 예정
+                            var tr = event.target.closest('tr');
+                            var idx = commentList.findIndex(function (comment) {
+                                return comment.no == tr.dataset.no;
+                            });
+                            if (idx !== -1) {
+
+                                editContainer.style.display = 'block';
+                                document.getElementById('editPostTxt').value = commentList[idx].post;
+                                document.getElementById('editEmpTxt').value = commentList[idx].employee;
+
+                                // Remove existing event listener to avoid multiple bindings
+                                document.getElementById('saveEditBtn').replaceWith(document.getElementById('saveEditBtn').cloneNode(true));
+                                document.getElementById('saveEditBtn').addEventListener('click', function () {
+                                    var editPost = document.getElementById('editPostTxt').value;
+                                    var editEmployee = document.getElementById('editEmpTxt').value;
+
+                                    commentList[idx].post = editPost;
+                                    commentList[idx].employee = editEmployee;
+
+                                    drawComment();
+                                    editContainer.style.display = 'none';
+
+                                    // Clear input fields
+                                    document.getElementById('editPostTxt').value = "";
+                                    document.getElementById('editEmpTxt').value = "";
+                                    document.getElementById('editPostTxt').placeholder = "댓글 수정";
+                                    document.getElementById('editEmpTxt').placeholder = "작성자 수정";
+                                });
+                            }
                         }
+                    });
+                    
+                    
+
+                    document.getElementById('postComment').addEventListener('click', function () {
+                        var commentTxt=document.getElementById('commentTxt').value;
+                        var commentEmp=document.getElementById('commentEmp').value;
+                        commentList.push({ no: commentList.length+1, post: commentTxt, employee: commentEmp })
+                        drawComment();
+                        document.getElementById('commentTxt').value = "";
+                        document.getElementById('commentEmp').value = "";
+                        document.getElementById('commentTxt').placeholder = "댓글 입력";
+                        document.getElementById('commentEmp').placeholder = "작성자 입력";
                     })
+
+
 
                 }
             });
-
-
-
         }
 
 
