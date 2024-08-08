@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<style>
+    table {
+        text-align: center;
+        width: 400px;
+        border-collapse: collapse;
+    }
+</style>
+
+<body>
+    <h1>Todo List</h1>
+    <input type="text" id="title">
+    <button id="saveBtn">Save</button>
+    <hr />
+    <table id="tableArea" border="1">
+
+    </table>
+    <hr>
+    <div id="editContainer" style="display:none; margin-top: 20px;">
+        <input type="text" id="editTodo" placeholder="할 일 수정" required>
+        <button id="saveEditBtn">EditSave</button>
+    </div>
+
+    <script>
+        //$(document).ready(function(){});의 축약형태
+        const todoList = [
+            { no: 101, title: "밥 만들기", done: false },
+            { no: 102, title: "밥 먹기", done: false },
+            { no: 103, title: "밥 치우기", done: false },
+        ];
+
+        function drawList() {
+            $('#tableArea').html("");
+            todoList.forEach(function (todo) {
+                $('#tableArea').append(`<tr data-no="${todo.no}">
+                    <td><input type="checkbox"/></td>
+                    <td>${todo.title}</td>
+                    <td><button class="editBtn">Edit</button></td>
+                    <td><button class="delBtn">Delete</button></td>
+                    </tr>`);
+            });
+            $('button.delBtn').on('click', function (event) {
+                let tr = event.target.closest('tr');
+                let idx = todoList.findIndex(function (t) {
+                    return t.no === parseInt(tr.dataset.no);
+                });
+                if (idx != -1) {
+                    todoList.splice(idx, 1);
+                }
+                drawList();
+            });
+            $('button.editBtn').on('click', function (event) {
+                $("#editContainer").show();
+                let tr = event.target.closest('tr');
+                let idx = todoList.findIndex(function (t) {
+                    return t.no === parseInt(tr.dataset.no);
+                });
+                
+                $('#saveEditBtn').on('click', function () {
+                    todoList[idx].title = $('#editTodo').val();
+                    $("#editContainer").hide();
+                    drawList();
+                });
+            });
+
+        }
+
+        $(function () {
+            drawList();
+        });
+
+
+
+
+        $('#saveBtn').on('click', function () {
+            if ($('#title').val()) {
+                todoList.push({ no: todoList.length + 101, title: $('#title').val(), done: false });
+                $('#title').val("");
+                drawList();
+            } else {
+                alert("제목을 입력하고 SAVE 하세요.");
+                $('#title').focus();
+                return;
+            }
+        });
+
+    </script>
+</body>
+
+</html>

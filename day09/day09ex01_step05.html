@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        span.okTitle {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <p>
+        할일: <input type="text" class="title">
+        <button id="saveBtn">SAVE</button>
+    </p>
+    <ul class="resultArea">
+    </ul>
+
+    <script>
+        var saveBtn = document.querySelector("#saveBtn");
+        var title = document.querySelector(".title");
+
+        var todoList = [
+            {no:101, title:"밥 먹기", done:false},
+            {no:102, title:"밥 소화하기", done:false},
+            {no:103, title:"밥밥디라라", done:false},
+            {no:104, title:"밥아저씨", done:false}
+        ];
+
+
+        function myFindIdx(todoList, todo) {
+            var idx = todoList.findIndex(function(t) {
+                return t.no === todo.no
+            });
+            return idx;
+        }
+
+        function drawList() {
+            var listArea = document.querySelector(".resultArea");
+            listArea.innerHTML = "";
+            todoList.forEach(function(todo) {
+                var liTag = document.createElement("li");
+                var checkBox = document.createElement("input");
+                var delBtn = document.createElement("button");
+                var spanTag = document.createElement("span");
+
+                liTag.style.listStyle = "none";
+                checkBox.setAttribute("type", "checkbox");
+                spanTag.setAttribute("class", "");
+                checkBox.removeAttribute("checked");
+                if(todo.done) {
+                    checkBox.setAttribute("checked", "checked");
+                    spanTag.setAttribute("class", "okTitle");
+                }
+                spanTag.innerHTML = todo.title + " ";
+                delBtn.innerText = "Delete";
+
+                delBtn.addEventListener('click', function(event) {
+                    var idx = myFindIdx(todoList, todo);
+                    if(idx != -1) {
+                        todoList.splice(idx, 1);
+                        drawList();
+                    }
+                });
+                checkBox.addEventListener('change', function(event){
+                    var idx = myFindIdx(todoList, todo);
+                    if(idx != -1) {
+                        todoList[idx].done = !todoList[idx].done;
+                        drawList();
+                    }
+                });
+
+                liTag.appendChild(checkBox);
+                liTag.appendChild(spanTag);
+                liTag.appendChild(delBtn);
+                listArea.appendChild(liTag);
+            });
+        }
+        drawList();
+
+        
+        function append() {
+            let newno = todoList.length ? Math.max(...todoList.map(t => t.no)) + 1 : 101;
+            todoList.push({
+                no:newno, title:title.value, done:false
+            });
+            drawList();
+            title.value = "";
+            title.focus();
+        }
+        saveBtn.onclick = function() {
+            append()
+        }
+
+        title.onkeydown = function(e) {
+            if(e.keyCode === 13) {
+                append();
+            }
+        }
+    </script>
+</body>
+</html>

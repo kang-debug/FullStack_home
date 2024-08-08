@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>드라이빙</title>
+    <script src="http://code.jQuery.com/jQuery.js"></script>
+    <style>
+        .head {
+            height: 150px;
+            color: rgb(230, 20, 20);
+            text-align: center;
+            font-size: 80px;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            line-height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::after {
+            width: 100%;
+            height: 100%;
+            content: "";
+            background: url("villege.jpg");
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .village {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .left {
+            transform: rotate(270deg);
+        }
+
+        .right {
+            transform: rotate(90deg);
+        }
+
+        .up {
+            transform: rotate(0deg);
+        }
+
+        .down {
+            transform: rotate(180deg);
+        }
+
+        .upRight {
+            transform: rotate(45deg);
+        }
+
+        .car {
+            position: absolute;
+            top: auto;
+            left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="head">
+            Drive
+        </div>
+        <div class="village">
+            <img src="car.png" id="car" class="left car" width="80px" height="80px">
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let interval;
+            $(document).keydown(function (event) {
+                if (event.key === "w" && !interval) {
+                    interval = setInterval(function () {
+                        let car = $("#car");
+                        car.removeClass("left").removeClass("right").removeClass("down").addClass("up");
+                        let currentTop = parseInt(car.css("top")) || 0;
+                        car.css("top", currentTop - 3 + "px");
+                    }, 10);
+                }
+                else if (event.key === "s" && !interval) {
+                    interval = setInterval(function () {
+                        let car = $("#car");
+                        car.removeClass("left").removeClass("right").removeClass("up").addClass("down");
+                        let currentTop = parseInt(car.css("top")) || 0;
+                        car.css("top", currentTop + 3 + "px");
+                    }, 10);
+                }
+                else if (event.key === "d" && !interval) {
+                    interval = setInterval(function () {
+                        let car = $("#car");
+                        car.removeClass("down").removeClass("left").removeClass("up").addClass("right");
+                        let currentleft = parseInt(car.css("left")) || 0;
+                        car.css("left", currentleft + 3 + "px");
+                    }, 10);
+                }
+                else if (event.key === "a" && !interval) {
+                    interval = setInterval(function () {
+                        let car = $("#car");
+                        car.removeClass("right").removeClass("down").removeClass("up").addClass("left");
+                        let currentleft = parseInt(car.css("left")) || 0;
+                        car.css("left", currentleft - 3 + "px");
+                    }, 10);
+                }
+
+            });
+
+            $(document).keyup(function (event) {
+                if ((event.key === "w" || event.key === "s") && interval) {
+                    clearInterval(interval);
+                    interval = null;
+                }
+                else if ((event.key === "a" || event.key === "d") && interval) {
+                    clearInterval(interval);
+                    interval = null;
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

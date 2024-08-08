@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box {
+            border: 5px solid navy;
+            width: 300px;
+            height: 100px;
+        }
+
+        .newBox {
+            position: relative;
+            left: 0px;
+            top: 0px;
+            display: block;
+            float: left;
+            box-sizing: border-box;
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+
+        .newBox ul {
+            display: block;
+            position: absolute;
+            border: 0px solid red;
+            padding: 0;
+            margin: 0;
+        }
+
+        .newBox img {
+            border: 1px solid orange;
+            width: 100px;
+            height: 100px;
+            list-style: none;
+            text-align: center;
+            line-height: 100px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>슬롯 머신</h1>
+    <button id="startBtn">START</button><button id="stopBtn">STOP</button>
+    <hr>
+    <div id="box"></div>
+
+    <script>
+        function Box() { }
+        Box.prototype = Object.create(HTMLDivElement.prototype);
+        Box.prototype.constructor = Box;
+        Box.prototype.init = function (text) {
+            this.newBox = document.createElement("Box");
+            this.elementUl = document.createElement("ul");
+            for (var i = 0; i < 5; i++) {
+                this.elementImg = document.createElement("img");
+                this.elementImg.src = `img/${i}.png`;
+                this.elementUl.appendChild(this.elementImg);
+            }
+            this.newBox.appendChild(this.elementUl);
+            this.newBox.setAttribute("class", "newBox");
+            //this.start();
+            return this.newBox;
+        }
+        Box.prototype.start = function (speed) {
+            // console.log("speed: ", speed)
+            this.elementUl.style.position = "absolute";
+            // Element의 좌표 움지임 확인
+            this.elementUl.style.left = "0px";
+            this.elementUl.style.top = "0px";
+            this.y = 0;
+            this.intervalRef = setInterval(() => {
+                this.y -= 10;
+                // this가 어떻게 바뀌는 확인 필수.
+                //console.log(this);
+                this.elementUl.style.top = this.y + "px";
+                if (this.y <= -600) {
+                    this.y = 0;
+                }
+            }, speed);
+        }
+
+
+        Box.prototype.stop = function () {
+            
+            clearInterval(this.intervalRef);
+            this.elementUl.style.top = Math.floor(this.y / 100)*100 + "px";
+        }
+
+        const divBox = document.querySelector("#box");
+
+        const boxArr = [
+            new Box(), new Box(), new Box()
+        ];
+        for (var i = 0; i < boxArr.length; i++) {
+            const newBox = boxArr[i].init();
+            divBox.appendChild(newBox);
+        }
+
+        const startBtn = document.querySelector("#startBtn");
+        startBtn.addEventListener('click', function (event) {
+            boxArr.forEach(function (box) {
+                box.start(Math.floor(5 + Math.random() * 40));
+            })
+        });
+        const stopBtn = document.querySelector("#stopBtn");
+        stopBtn.addEventListener('click', function (event) {
+
+            boxArr.forEach(function (box) {
+                box.stop();
+                setTimeout(function () {
+                   console.log("stop!");
+                }, 1000);
+            })
+        });
+    </script>
+</body>
+
+</html>

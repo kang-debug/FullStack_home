@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // $("h2").css("backgroundColor","yellow");
+            $("button:nth(0)").click(function () {
+                $("p").hide(600);
+                $("body").css({ backgroundColor: "" });
+
+            });
+            $("button:nth(1)").click(function () {
+                $("p").show(600);
+                //jQuery객체를 DOM으로 변경해서 사용
+                $("p:nth(1)")[0].innerText = "wwwwwwwwwww";
+                $("body").css({ backgroundColor: "orange" });
+                //jQuery의 text() 또는 html 메서드 사용.
+                $("p:nth(0)").text("gggg");
+                //메서드 체인, on으로 event 키고 off로 끄고 
+                $("p:nth(2)").text("Hello world")
+                    .css({
+                        color:"green",
+                        backgroundColor:"yellow"
+                    }).on('click',function(){
+                        alert(this.innerText);
+                        $(this).off('click');
+                    });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h2>This is heading</h2>
+    <button>Hide</button>
+    <button>Show</button>
+    <p>사라질 영역1.</p>
+    <p>사라질 영역2.</p>
+    <p>사라질 영역3</p>
+
+</html>

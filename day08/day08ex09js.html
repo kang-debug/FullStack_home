@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button {
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>랜덤 숫자 찾기 게임</h1> 
+    <h3 id="comment">
+
+    </h3>
+    <h3 id="chance"></h3>
+    <button id="startBtn">시작하기</button>
+    <br>
+    
+    <div id="btnArea">
+
+    </div>
+</body>
+<script>
+    function getRand(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+    function draw () {
+        
+
+        let min = 1;
+        let max = 100;
+        let chance = 5;
+        let num = getRand(min, max);
+
+        let btnArea = document.getElementById('btnArea');
+        let comment = document.getElementById('comment');
+        document.getElementById('chance').innerHTML="남은 기회 : "+chance;
+
+        document.getElementById('startBtn').addEventListener('click', function () {
+            btnArea.innerHTML = "";
+            for (let i = min; i <= max; i++) {
+                startBtn.style.display = 'none';
+                let btn = document.createElement("button");
+                btn.innerText = i;
+                btn.onclick = function (e) {
+                    chance--;
+                    document.getElementById('chance').innerHTML="남은 기회 : "+chance;
+                    let clickNum = Number(e.target.innerText);
+
+                    if ( clickNum > num ){
+                        comment.innerHTML="정답 보다 큰 숫자 입니다";
+
+                    }
+
+                }
+                btnArea.appendChild(btn);
+
+            }
+        })
+
+    }
+</script>
+
+</html>
