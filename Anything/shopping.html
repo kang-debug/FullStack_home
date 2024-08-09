@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mart</title>
+    <script src="http://code.jQuery.com/jQuery.js"></script>
+
+    <link rel="stylesheet" href="shopping.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+
+        </div>
+        <div class="middle">
+            <div class="item">
+                <h3 id="cartEmo">🛒</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>제품번호</th>
+                            <th>제품명</th>
+                            <th>가격(단위 : $)</th>
+                            <th>수량</th>
+                            <th><button id="cartBtn">카트 꺼내기</button></th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemTable">
+
+                    </tbody>
+                </table>
+               
+            </div>
+            <div class="cart">
+
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        const itemList = [
+            { no: 101, title: "IPONE 13 ", price: 800, inventory: 10 },
+            { no: 102, title: "IPONE 13 PRO", price: 900, inventory: 13 },
+            { no: 103, title: "IPONE 13 PRO MAX", price: 950, inventory: 6 },
+            { no: 104, title: "IPONE 14 ", price: 850, inventory: 2 },
+            { no: 105, title: "IPONE 14 PRO", price: 950, inventory: 1 },
+            { no: 106, title: "IPONE 14 PRO MAX", price: 1050, inventory: 0 },
+        ];
+
+        function draw() {
+            $('#itemTable').html("");
+            itemList.forEach(function (item) {
+                $('#itemTable').append(`<tr align="center" data-no="${item.no}">
+                        <td>${item.no}</td>
+                        <td align="left">${item.title}</td>
+                        <td>${item.price}</td>
+                        <td>${item.inventory}</td>
+                        <td><button onclick="cartInputBtn">카트담기</button></td>
+                    </tr>`);
+            });
+        }
+
+       
+
+        function cart(){
+            var keypress = {},
+                $item = $('.item'),
+                $head = $('.header'),
+                itemWidth = $item.width(),
+                itemHeight = $item.height(),
+                headHeight = $head.height(),
+                cartEmox = itemWidth * 0.9,
+                cartEmoy = headHeight + itemHeight * 0.2,
+                speed = 5,
+                $cartEmo = $('#cartEmo');
+
+
+            setInterval(function () {
+                if (keypress['38']) { //W
+                    cartEmoy -= speed;
+                }
+                if (keypress['40']) { //S
+                    cartEmoy += speed;
+                }
+                $cartEmo.css({ top: cartEmoy, left: cartEmox });
+            }, 10);
+
+            $(document).keydown(function (e) {
+                keypress[e.which.toString()] = true;
+            });
+            $(document).keyup(function (e) {
+                keypress[e.which.toString()] = false;
+            });
+        }
+
+        $(function () {
+            $('#cartEmo').hide();
+            $('#cartBtn').click(function(){
+                $('#cartEmo').show();
+            });
+            draw();
+            cart();
+        });
+
+
+
+        
+    </script>
+</body>
+
+</html>
