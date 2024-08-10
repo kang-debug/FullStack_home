@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mart</title>
-    <script src="http://code.jQuery.com/jQuery.js"></script>
-
     <link rel="stylesheet" href="shopping.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -18,24 +17,45 @@
         <div class="middle">
             <div class="item">
                 <h3 id="cartEmo">🛒</h3>
+                <button type="button" class="editBtn btn btn-primary" data-toggle="modal" data-target="#productModal">
+                    제품등록
+                </button>
+                
                 <table>
                     <thead>
-                        <tr>
+                        <tr align="center">
                             <th>제품번호</th>
                             <th>제품명</th>
                             <th>가격(단위 : $)</th>
-                            <th>수량</th>
-                            <th><button id="cartBtn">카트 꺼내기</button></th>
+                            <th>재고</th>
+                            
                         </tr>
                     </thead>
                     <tbody id="itemTable">
 
                     </tbody>
                 </table>
-               
-            </div>
-            <div class="cart">
 
+            </div>
+            <button id="cartBtn">카트 꺼내기</button>
+            <div class="cart">
+                <h1>&nbsp;&nbsp;&nbsp;Cart Item</h1>
+                <hr>
+                <table>
+                    <thead>
+                        <tr align="center">
+                            <th>제품명</th>
+                            <th>가격</th>
+                            <th>수량</th>
+                            <th>카트에서 빼기</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTable">
+
+                    </tbody>
+                </table>
+                <hr>
+                <h5 id="Total"></h3>
             </div>
         </div>
         <div class="footer">
@@ -43,8 +63,45 @@
         </div>
 
     </div>
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">제품 등록</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <div class="form-group">
+                            <label for="productName">제품명</label>
+                            <input type="text" class="form-control" id="productName" placeholder="제품명을 입력하세요" >
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">가격</label>
+                            <input type="number" class="form-control" id="productPrice" placeholder="가격을 입력하세요" >
+                        </div>
+                        <div class="form-group">
+                            <label for="productQuantity">수량</label>
+                            <input type="number" class="form-control" id="productQuantity" placeholder="수량을 입력하세요" >
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" id="saveProductBtn">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
 
 
@@ -57,7 +114,9 @@
             { no: 106, title: "IPONE 14 PRO MAX", price: 1050, inventory: 0 },
         ];
 
-        function draw() {
+        const cartList = [];
+
+        function itemdraw() {
             $('#itemTable').html("");
             itemList.forEach(function (item) {
                 $('#itemTable').append(`<tr align="center" data-no="${item.no}">
@@ -65,25 +124,101 @@
                         <td align="left">${item.title}</td>
                         <td>${item.price}</td>
                         <td>${item.inventory}</td>
-                        <td><button onclick="cartInputBtn">카트담기</button></td>
+                        <td><button class="cartInputBtn btn btn-success">카트담기</button></td>
                     </tr>`);
+            });
+            $('.cartInputBtn').off('click').on('click', function () {
+                var itemNo = $(this).closest('tr').data('no');
+                addToCart(itemNo);
             });
         }
 
-       
 
-        function cart(){
+        function cartdraw(){
+            $('#cartTable').html("");
+            cartList.forEach(function (c){
+                $('#cartTable').append(`<tr align="center" data-no="${c.no}">
+                        <td align="left">${c.title}</td>
+                        <td>${c.price}</td>
+                        <td>${c.inventory}</td>
+                        <td><button class="cartOutBtn">빼기</button></td>
+                    </tr>`);
+            });
+
+            $('.cartOutBtn').off('click').on('click', function () {
+                var itemNo = $(this).closest('tr').data('no');
+                removeFromCart(itemNo);
+            });
+            
+        }
+
+        function addToCart(itemNo) {
+            const item = itemList.find(i => i.no === itemNo);
+            const cartItem = cartList.find(i => i.no === itemNo);
+
+            if (item.inventory === 0) {
+                alert("재고가 부족합니다.");
+            } else if (cartItem && cartItem.inventory >= item.inventory) {
+                alert("재고가 부족합니다.");
+            } else {
+                if (cartItem) {
+                    cartItem.inventory += 1;
+                } else {
+                    cartList.push({ no: item.no, title: item.title, price: item.price, inventory: 1 });
+                }
+                cartdraw();
+            }
+            
+        }
+        function removeFromCart(itemNo) {
+            const cartItem = cartList.find(i => i.no === itemNo);
+            if (cartItem) {
+                cartItem.inventory -= 1;
+                if (cartItem.inventory <= 0) {
+                    const index = cartList.indexOf(cartItem);
+                    cartList.splice(index, 1);
+                }
+            }
+            cartdraw();
+        }
+
+        
+
+        $('#saveProductBtn').click(function(){
+
+            var productName = $('#productName').val().trim();
+            var productPrice = $('#productPrice').val().trim();
+            var productQuantity = $('#productQuantity').val().trim();
+
+
+            if (!productName || !productPrice || !productQuantity) {
+                alert("모든 내용을 입력해야 합니다.");
+                return;
+            }
+            
+            itemList.push({no:(itemList.length)+101,title:$('#productName').val(),price:$('#productPrice').val(),inventory:$('#productQuantity').val()});
+            $('#productName').val("");
+            $('#productPrice').val("");
+            $('#productQuantity').val("");
+            $('#productModal').modal('hide');
+            itemdraw();
+            
+        });
+
+        function cart() {
             var keypress = {},
                 $item = $('.item'),
                 $head = $('.header'),
+                $tbody = $('#itemTable'),
                 itemWidth = $item.width(),
                 itemHeight = $item.height(),
                 headHeight = $head.height(),
-                cartEmox = itemWidth * 0.9,
-                cartEmoy = headHeight + itemHeight * 0.2,
+                tbodyTop = $tbody.offset().top,
+                tbodyHeight = $tbody.height(),
+                cartEmox = itemWidth * 1.15,
+                cartEmoy = tbodyTop,
                 speed = 5,
                 $cartEmo = $('#cartEmo');
-
 
             setInterval(function () {
                 if (keypress['38']) { //W
@@ -91,6 +226,13 @@
                 }
                 if (keypress['40']) { //S
                     cartEmoy += speed;
+                }
+
+                
+                if (cartEmoy < tbodyTop) {
+                    cartEmoy = tbodyTop;
+                } else if (cartEmoy > tbodyTop + tbodyHeight - $cartEmo.height()) {
+                    cartEmoy = tbodyTop + tbodyHeight - $cartEmo.height();
                 }
                 $cartEmo.css({ top: cartEmoy, left: cartEmox });
             }, 10);
@@ -103,18 +245,23 @@
             });
         }
 
+
+
+
+
         $(function () {
             $('#cartEmo').hide();
-            $('#cartBtn').click(function(){
-                $('#cartEmo').show();
+            $('#cartBtn').click(function () {
+                $('#cartEmo').toggle();
             });
-            draw();
+            itemdraw();
+            cartdraw();
             cart();
         });
 
 
 
-        
+
     </script>
 </body>
 
