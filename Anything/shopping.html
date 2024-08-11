@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <div class="header">
-
+            Apple market
         </div>
         <div class="middle">
             <div class="item">
@@ -20,7 +20,7 @@
                 <button type="button" class="editBtn btn btn-primary" data-toggle="modal" data-target="#productModal">
                     제품등록
                 </button>
-                
+
                 <table>
                     <thead>
                         <tr align="center">
@@ -28,7 +28,6 @@
                             <th>제품명</th>
                             <th>가격(단위 : $)</th>
                             <th>재고</th>
-                            
                         </tr>
                     </thead>
                     <tbody id="itemTable">
@@ -37,7 +36,6 @@
                 </table>
 
             </div>
-            <button id="cartBtn">카트 꺼내기</button>
             <div class="cart">
                 <h1>&nbsp;&nbsp;&nbsp;Cart Item</h1>
                 <hr>
@@ -55,7 +53,7 @@
                     </tbody>
                 </table>
                 <hr>
-                <h5 id="Total"></h3>
+                <h5 id="Total">Total price : $0</h5>
             </div>
         </div>
         <div class="footer">
@@ -77,15 +75,15 @@
                     <form id="productForm">
                         <div class="form-group">
                             <label for="productName">제품명</label>
-                            <input type="text" class="form-control" id="productName" placeholder="제품명을 입력하세요" >
+                            <input type="text" class="form-control" id="productName" placeholder="제품명을 입력하세요">
                         </div>
                         <div class="form-group">
                             <label for="productPrice">가격</label>
-                            <input type="number" class="form-control" id="productPrice" placeholder="가격을 입력하세요" >
+                            <input type="number" class="form-control" id="productPrice" placeholder="가격을 입력하세요">
                         </div>
                         <div class="form-group">
                             <label for="productQuantity">수량</label>
-                            <input type="number" class="form-control" id="productQuantity" placeholder="수량을 입력하세요" >
+                            <input type="number" class="form-control" id="productQuantity" placeholder="수량을 입력하세요">
                         </div>
                     </form>
                 </div>
@@ -134,9 +132,9 @@
         }
 
 
-        function cartdraw(){
+        function cartdraw() {
             $('#cartTable').html("");
-            cartList.forEach(function (c){
+            cartList.forEach(function (c) {
                 $('#cartTable').append(`<tr align="center" data-no="${c.no}">
                         <td align="left">${c.title}</td>
                         <td>${c.price}</td>
@@ -148,8 +146,14 @@
             $('.cartOutBtn').off('click').on('click', function () {
                 var itemNo = $(this).closest('tr').data('no');
                 removeFromCart(itemNo);
+
             });
-            
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            const totalPrice = cartList.reduce((total, item) => total + item.price * item.inventory, 0);
+            $('#Total').text(`Total price : $${totalPrice}`);
         }
 
         function addToCart(itemNo) {
@@ -168,7 +172,7 @@
                 }
                 cartdraw();
             }
-            
+
         }
         function removeFromCart(itemNo) {
             const cartItem = cartList.find(i => i.no === itemNo);
@@ -182,9 +186,9 @@
             cartdraw();
         }
 
-        
 
-        $('#saveProductBtn').click(function(){
+
+        $('#saveProductBtn').click(function () {
 
             var productName = $('#productName').val().trim();
             var productPrice = $('#productPrice').val().trim();
@@ -195,14 +199,14 @@
                 alert("모든 내용을 입력해야 합니다.");
                 return;
             }
-            
-            itemList.push({no:(itemList.length)+101,title:$('#productName').val(),price:$('#productPrice').val(),inventory:$('#productQuantity').val()});
+
+            itemList.push({ no: (itemList.length) + 101, title: $('#productName').val(), price: $('#productPrice').val(), inventory: $('#productQuantity').val() });
             $('#productName').val("");
             $('#productPrice').val("");
             $('#productQuantity').val("");
             $('#productModal').modal('hide');
             itemdraw();
-            
+
         });
 
         function cart() {
@@ -217,18 +221,18 @@
                 tbodyHeight = $tbody.height(),
                 cartEmox = itemWidth * 1.15,
                 cartEmoy = tbodyTop,
-                speed = 5,
+                speed = 3,
                 $cartEmo = $('#cartEmo');
 
             setInterval(function () {
-                if (keypress['38']) { //W
+                if (keypress['38']) { // 위
                     cartEmoy -= speed;
                 }
-                if (keypress['40']) { //S
+                if (keypress['40']) { // 아래   
                     cartEmoy += speed;
                 }
 
-                
+
                 if (cartEmoy < tbodyTop) {
                     cartEmoy = tbodyTop;
                 } else if (cartEmoy > tbodyTop + tbodyHeight - $cartEmo.height()) {
@@ -239,21 +243,38 @@
 
             $(document).keydown(function (e) {
                 keypress[e.which.toString()] = true;
+
+                if (e.which == 32) {
+                    var cartEmoOffset = $cartEmo.offset();
+                    var cartEmoWidth = $cartEmo.width();
+                    var cartEmoHeight = $cartEmo.height();
+
+
+                    $('.cartInputBtn').each(function () {
+                        var $btn = $(this);
+                        var btnOffset = $btn.offset();
+                        var btnWidth = $btn.width();
+                        var btnHeight = $btn.height();
+
+
+                        if (cartEmoOffset.left < btnOffset.left + btnWidth &&
+                            cartEmoOffset.left + cartEmoWidth > btnOffset.left &&
+                            cartEmoOffset.top < btnOffset.top + btnHeight &&
+                            cartEmoOffset.top + cartEmoHeight > btnOffset.top) {
+
+                            $btn.click();
+                        }
+                    });
+                }
             });
+
             $(document).keyup(function (e) {
                 keypress[e.which.toString()] = false;
             });
+
         }
 
-
-
-
-
         $(function () {
-            $('#cartEmo').hide();
-            $('#cartBtn').click(function () {
-                $('#cartEmo').toggle();
-            });
             itemdraw();
             cartdraw();
             cart();

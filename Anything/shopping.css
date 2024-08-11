@@ -1,16 +1,32 @@
 .container{
     height: 100vh;
-
+    width: 100%;
+    
 }
-.header{
+.header {
     width: 100%;
     height: 20%;
+    position: relative; 
     border-bottom: 3px solid navy;
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold; 
+    color: rgb(45, 3, 80);
 }
-#cartBtn{
-    width: 100px;
-    height: 40px;
-    margin: 5px;
+
+.header::before {
+    content: "";
+    background-image: url(apple.png);
+    background-size: contain; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5; 
+    z-index: 0; 
 }
 #itemTable button{
     background-color: aquamarine;
@@ -39,15 +55,15 @@
 .item table{
     width: 100%;
 }
+
 #cartEmo{
     position: absolute;
-    font-size: 30px;
+    font-size: 20px;
 }
 .cart{
     border-left: 2px solid navy;
     border-radius: 5px;
     background-color: blanchedalmond;
-    
     height: 90%;
     width: 25%;
 }
